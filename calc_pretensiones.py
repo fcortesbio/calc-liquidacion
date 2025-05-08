@@ -5,7 +5,7 @@ import calendar
 # Load the dataframe
 df_paystubs = pd.read_csv('paystubs-summary.csv')
 ######### Debugging: Verify how many reports are read
-print("Cantidad de registros en paystubs:", len(df_paystubs))
+# print("Cantidad de registros en paystubs:", len(df_paystubs))
 
 # Load and process dataframe columns
 # Parse dates based on the label column to handle formats like "16 al 30 de Abril 2023"
@@ -40,8 +40,8 @@ df_paystubs['total_extras'] = df_paystubs[extras_cols].sum(axis=1)
 # df_paystubs['year_month_period'] = pd.Series(df_paystubs['Period_Start_Date']).dt.to_period('M')
 
 ######### Debugging:Print values of year_month_period
-print("Periodos detectados en los registros:")
-print(df_paystubs[['label', 'Period_Start_Date', 'year_month_period']])
+# print("Periodos detectados en los registros:")
+# print(df_paystubs[['label', 'Period_Start_Date', 'year_month_period']])
 
 monthly_summary_list = []
 
@@ -222,14 +222,11 @@ print("\n")
 fecha_actual = datetime.now() # For real-time calculation. For testing, you can set: datetime(YYYY, M, D)
 
 # Salario diario para indemnizaciones, based on last nominal monthly salary.
-# User specified 2,100,000/30. Data for full months (e.g., Jan 2024) shows base 2,100,000.
-# Feb part-time data (140,000 for 2 days) also projects to 2,100,000/month.
 ultimo_salario_mensual_ref = 2_100_000 
 salario_diario_indemnizacion_general = ultimo_salario_mensual_ref / 30
 
 # 1. Indemnización por mora en liquidación (Art. 65 CST)
-# User: "today - termination_date (feb 17, 2024 + 15 days)"
-# This means mora starts after a 15-day grace period post-termination.
+# Periodo de mora inicia 15 días después de la finaziación del contrato (feb 17, 2024)"
 fecha_limite_pago_liquidacion = fecha_fin_contrato + timedelta(days=15)
 dias_retraso_liquidacion = 0
 if fecha_actual > fecha_limite_pago_liquidacion:
