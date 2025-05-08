@@ -4,6 +4,8 @@ import calendar
 
 # Load the dataframe
 df_paystubs = pd.read_csv('paystubs-summary.csv')
+######### Debugging: Verify how many reports are read
+print("Cantidad de registros en paystubs:", len(df_paystubs))
 
 # Load and process dataframe columns
 # Parse dates based on the label column to handle formats like "16 al 30 de Abril 2023"
@@ -68,6 +70,7 @@ def parse_period_string(period_str):
 
 # Process period labels and add date-based columns 
 parsed_periods = [parse_period_string(p) for p in df_paystubs['label']]
+
 # The parse_period_string function already returns datetime objects, no conversion needed
 df_paystubs['Period_Start_Date'] = [p[0] for p in parsed_periods]  # Already datetime objects
 df_paystubs['Period_End_Date'] = [p[1] for p in parsed_periods]    # Already datetime objects
@@ -85,6 +88,11 @@ df_paystubs['total_extras'] = df_paystubs[extras_cols].sum(axis=1)
 # --- Part 1: Monthly Financial Summary ---
 # Create a new column with period based on the datetime objects
 df_paystubs['year_month_period'] = pd.Series(df_paystubs['Period_Start_Date']).dt.to_period('M')
+
+######### Debugging:Print values of year_month_period
+print("Periodos detectados en los registros:")
+print(df_paystubs[['label', 'Period_Start_Date', 'year_month_period']])
+
 monthly_summary_list = []
 
 # Aggregate paystub data into calendar months
@@ -112,10 +120,16 @@ for month_period_obj, group in df_paystubs.groupby('year_month_period'):
 
 df_monthly_report = pd.DataFrame(monthly_summary_list)
 
+
+####### Debugging: Verify datatypes for df_monthly_report
+print(df_monthly_report[['Month']])
+print(df_monthly_report['Month'].dtype)
+
+
 # Filter for the required range: April 2023 to February 2024
 start_report_month = pd.Period('2023-04', freq='M')
 end_report_month = pd.Period('2024-02', freq='M')
-df_monthly_report['Month_Period_Obj'] = pd.to_datetime(df_monthly_report['Month']).dt.to_period('M')
+df_monthly_report['Month_Period_Obj'] = pd.PeriodIndex(df_monthly_report['Month'], freq='M')
 df_monthly_report = df_monthly_report[
     (df_monthly_report['Month_Period_Obj'] >= start_report_month) &
     (df_monthly_report['Month_Period_Obj'] <= end_report_month)
