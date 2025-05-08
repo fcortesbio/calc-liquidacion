@@ -11,72 +11,22 @@ print("Cantidad de registros en paystubs:", len(df_paystubs))
 # Parse dates based on the label column to handle formats like "16 al 30 de Abril 2023"
 
 # First, parse the periods from 'label' column
-def parse_period_string(period_str):
-    """
-    Parses strings like "16 al 30 de Abril 2023" or "16 al 17 de febrero de 2024"
-    Returns the start_date, end_date, month_name, year of the period.
-    This function will parse the END date of the period for assigning month/year.
-    """
-    parts = period_str.split(' de ')
-    
-    try:
-        year = int(parts[-1])
-        month_name_es = parts[-2].strip().lower()
-    except (ValueError, IndexError):
-        # Special case for "febrero de 2024"
-        if len(parts) > 1 and "febrero de 2024" in period_str:
-            month_name_es = "febrero"
-            year = 2024
-        else:
-            # Special case for simple "Month YYYY" format
-            try:
-                words = period_str.split()
-                month_name_es = words[0].lower()
-                year = int(words[1])
-            except (IndexError, ValueError):
-                # If all else fails, assume current month/year
-                current_date = datetime.now()
-                month_name_es = {
-                    1: 'enero', 2: 'febrero', 3: 'marzo', 4: 'abril', 
-                    5: 'mayo', 6: 'junio', 7: 'julio', 8: 'agosto',
-                    9: 'septiembre', 10: 'octubre', 11: 'noviembre', 12: 'diciembre'
-                }[current_date.month]
-                year = current_date.year
-    
-    month_map_es_to_int = {
-        'enero': 1, 'febrero': 2, 'marzo': 3, 'abril': 4, 'mayo': 5, 'junio': 6,
-        'julio': 7, 'agosto': 8, 'septiembre': 9, 'octubre': 10, 'noviembre': 11, 'diciembre': 12
-    }
-    month_int = month_map_es_to_int[month_name_es]
-    
-    try:
-        # Only try to extract days if the format looks like "DD al DD ..."
-        if "al" in parts[0]:
-            day_parts = parts[0].replace("al ", "").split()
-            start_day = int(day_parts[0])
-            end_day = int(day_parts[-1])
-        else:
-            # Simple month format, use first and last day of month
-            start_day = 1
-            end_day = calendar.monthrange(year, month_int)[1]
-    except (ValueError, IndexError):
-        # Default to full month
-        start_day = 1
-        end_day = calendar.monthrange(year, month_int)[1]
+# Parse start/end dates directly from CSV columns
+df_paystubs['Period_Start_Date'] = pd.to_datetime(df_paystubs['pay_period_starts'], dayfirst=False)
+df_paystubs['Period_End_Date'] = pd.to_datetime(df_paystubs['pay_period_ends'], dayfirst=False)
 
-    return (datetime(year, month_int, start_day), 
-            datetime(year, month_int, end_day), 
-            month_name_es, year, month_int)
+# Add month/year metadata
+df_paystubs['Year'] = df_paystubs['Period_Start_Date'].dt.year
+df_paystubs['Month_Int'] = df_paystubs['Period_Start_Date'].dt.month
+df_paystubs['year_month_period'] = df_paystubs['Period_Start_Date'].dt.to_period('M')
 
-# Process period labels and add date-based columns 
-parsed_periods = [parse_period_string(p) for p in df_paystubs['label']]
-
-# The parse_period_string function already returns datetime objects, no conversion needed
-df_paystubs['Period_Start_Date'] = [p[0] for p in parsed_periods]  # Already datetime objects
-df_paystubs['Period_End_Date'] = [p[1] for p in parsed_periods]    # Already datetime objects
-df_paystubs['Month_Name_ES'] = [p[2] for p in parsed_periods]
-df_paystubs['Year'] = [p[3] for p in parsed_periods]
-df_paystubs['Month_Int'] = [p[4] for p in parsed_periods]
+# For consistency, keep Spanish month names if you still use them later
+month_map_es = {
+    1: 'enero', 2: 'febrero', 3: 'marzo', 4: 'abril',
+    5: 'mayo', 6: 'junio', 7: 'julio', 8: 'agosto',
+    9: 'septiembre', 10: 'octubre', 11: 'noviembre', 12: 'diciembre'
+}
+df_paystubs['Month_Name_ES'] = df_paystubs['Month_Int'].map(month_map_es)
 
 # Define Extras columns and ensure numeric types, fill NaNs for calculations
 extras_cols = ['sunday_bonus', 'holiday_bonus', 'night_bonus', 'day_overtime', 'night_overtime']
@@ -87,7 +37,7 @@ df_paystubs['total_extras'] = df_paystubs[extras_cols].sum(axis=1)
 
 # --- Part 1: Monthly Financial Summary ---
 # Create a new column with period based on the datetime objects
-df_paystubs['year_month_period'] = pd.Series(df_paystubs['Period_Start_Date']).dt.to_period('M')
+# df_paystubs['year_month_period'] = pd.Series(df_paystubs['Period_Start_Date']).dt.to_period('M')
 
 ######### Debugging:Print values of year_month_period
 print("Periodos detectados en los registros:")
