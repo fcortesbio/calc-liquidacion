@@ -55,8 +55,8 @@ for month_period_obj, group in df_paystubs.groupby('year_month_period'):
     
     # IBC for pension: As per user, Salary + Aux_transporte
     monthly_ibc = monthly_salary + monthly_aux_transporte
-    # Aporte Pensión (16% represents total employer + employee contribution)
-    monthly_aporte_pension = monthly_ibc * 0.16 
+    # Aporte Pensión (12% represents total employer + employee contribution)
+    monthly_aporte_pension = monthly_ibc * 0.12
 
     monthly_summary_list.append({
         "Month": month_period_obj.strftime('%Y-%m'),
@@ -65,15 +65,15 @@ for month_period_obj, group in df_paystubs.groupby('year_month_period'):
         "Total Salary (Base + Extras)": monthly_salary,
         "Auxilio Transporte": monthly_aux_transporte,
         "IBC (Ingreso Base Cotización)": monthly_ibc,
-        "Aporte Pensión (16%)": round(monthly_aporte_pension) # Round final pension amount
+        "Aporte Pensión (12%)": round(monthly_aporte_pension) # Round final pension amount
     })
 
 df_monthly_report = pd.DataFrame(monthly_summary_list)
 
 
 ####### Debugging: Verify datatypes for df_monthly_report
-print(df_monthly_report[['Month']])
-print(df_monthly_report['Month'].dtype)
+# print(df_monthly_report[['Month']])
+# print(df_monthly_report['Month'].dtype)
 
 
 # Filter for the required range: April 2023 to February 2024
