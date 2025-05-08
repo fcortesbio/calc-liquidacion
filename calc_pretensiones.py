@@ -199,7 +199,7 @@ liquidacion_items = [
     {"Concepto": "Prima 1er Semestre 2023 (Apr 17 - Jun 30)", "Valor": prima_1_2023, "Estado": "Pagada"},
     {"Concepto": "Prima 2do Semestre 2023 (Jul 01 - Dec 31)", "Valor": prima_2_2023, "Estado": "Pagada"},
     {"Concepto": "Prima Proporcional 2024 (Ene 01 - Feb 17)", "Valor": prima_2024, "Estado": "No Pagada"},
-    {"Concepto": "Cesantías 2023 (Apr 17 - Dec 31)", "Valor": cesantias_2023, "Estado": "No Pagada (Consignar/Liquidar)"},
+    {"Concepto": "Cesantías 2023 (Apr 17 - Dec 31)", "Valor": cesantias_2023, "Estado": "No Pagada"},
     {"Concepto": "Intereses sobre Cesantías 2023", "Valor": intereses_cesantias_2023, "Estado": "No Pagada"},
     {"Concepto": "Cesantías Proporcionales 2024 (Ene 01 - Feb 17)", "Valor": cesantias_2024, "Estado": "No Pagada"},
     {"Concepto": "Intereses sobre Cesantías Proporcionales 2024", "Valor": intereses_cesantias_2024, "Estado": "No Pagada"},
