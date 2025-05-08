@@ -279,3 +279,49 @@ print(df_indemnizaciones.to_string(index=False))
 monto_total_pretensiones = total_liquidacion_no_pagada + total_indemnizaciones
 print("\n--- MONTO TOTAL DE LAS PRETENSIONES ---")
 print(f"Monto total de las pretensiones: {round(monto_total_pretensiones)}")
+
+
+
+# OUTPUT: 
+# python calc_pretensiones.py
+# --- MONTHLY FINANCIAL SUMMARY (April 2023 - February 2024) ---
+#   Month  Base Salary  Extras  Total Salary (Base + Extras)  Auxilio Transporte  IBC (Ingreso Base Cotización)  Aporte Pensión (12%)
+# 2023-04       980000       0                        980000               65616                        1045616                125474
+# 2023-05      2100000       0                       2100000              140606                        2240606                268873
+# 2023-06      2100000  118125                       2218125              140606                        2358731                283048
+# 2023-07      2100000  234640                       2334640              140606                        2475246                297030
+# 2023-08      2100000  268710                       2368710              140606                        2509316                301118
+# 2023-09      2100000  306372                       2406372              140606                        2546978                305637
+# 2023-10      2100000  174780                       2274780              140606                        2415386                289846
+# 2023-11      2100000  329673                       2429673              140606                        2570279                308433
+# 2023-12      2100000  372853                       2472853              140606                        2613459                313615
+# 2024-01      2100000  376683                       2476683              162000                        2638683                316642
+# 2024-02      1190000  295801                       1485801              162000                        1647801                197736
+
+
+
+# --- DETALLE DE LIQUIDACIÓN ---
+#                                        Concepto   Valor    Estado
+#       Prima 1er Semestre 2023 (Apr 17 - Jun 30)  464604    Pagada
+#       Prima 2do Semestre 2023 (Jul 01 - Dec 31) 1260889    Pagada
+#       Prima Proporcional 2024 (Ene 01 - Feb 17)  357207 No Pagada
+#                Cesantías 2023 (Apr 17 - Dec 31) 1725492 No Pagada
+#                  Intereses sobre Cesantías 2023  148968 No Pagada
+# Cesantías Proporcionales 2024 (Ene 01 - Feb 17)  357207 No Pagada
+#   Intereses sobre Cesantías Proporcionales 2024    5715 No Pagada
+#        Vacaciones (Apr 17, 2023 - Feb 17, 2024)  875194 No Pagada
+#          Valor total de liquidación (No Pagado) 3469783          
+
+
+
+# --- INDEMNIZACIONES Y SANCIONES POR MORA ---
+# Cálculos realizados a fecha: 2025-05-08 09:59:00
+#                                                       Concepto    Valor
+#    Indemnización por mora en pago de liquidación (Art. 65 CST) 30170000
+#                           (Días mora: 431, Salario día: 70000)         
+# Sanción por no consignación Cesantías 2023 (Ley 50/90 Art. 99) 31430000
+#                           (Días mora: 449, Salario día: 70000)         
+#                              Total Indemnizaciones y Sanciones 61600000
+
+# --- MONTO TOTAL DE LAS PRETENSIONES ---
+# Monto total de las pretensiones: 65069783
