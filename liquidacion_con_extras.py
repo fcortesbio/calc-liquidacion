@@ -3,9 +3,8 @@ from datetime import datetime
 import pandas as pd
 
 # === CONFIGURABLE VARIABLES ===
-salario_base_2023 = 2_100_000
+salario_base = salario_base_2023 = salario_base_2024 = 2_100_000
 aux_transporte_2023 = 140_606
-salario_base_2024 = 2_100_000
 aux_transporte_2024 = 162_000
 
 # Extras (recargos, dominicales, festivos, etc.) for 2023 as estimated
@@ -14,7 +13,7 @@ meses_laborados_2023 = 8.5
 salario_promedio_2023 = salario_base_2023 + (extras_total_2023 / meses_laborados_2023)
 salario_promedio_2024 = salario_base_2024
 
-# Work periods
+# Periodos laborales
 fecha_inicio_abr = datetime(2023, 4, 17)
 fecha_fin_jun = datetime(2023, 6, 30)
 fecha_inicio_jul = datetime(2023, 7, 1)
@@ -26,7 +25,7 @@ fecha_limite_cesantias = datetime(2024, 2, 14)
 fecha_limite_prima = datetime(2024, 3, 13)
 fecha_actual = datetime.now()
 
-# === FUNCTIONS ===
+# === FUNCIONES ===
 def calcular_dias_laborados(inicio, fin):
     return (fin - inicio).days + 1
 
@@ -48,7 +47,7 @@ def calcular_intereses_cesantias(cesantias, dias):
 def calcular_moratoria(dia_salario, dias_mora):
     return dia_salario * dias_mora
 
-# === CALCULATIONS ===
+# === Calculos ===
 # Days
 dias_abr_jun = calcular_dias_laborados(fecha_inicio_abr, fecha_fin_jun)
 dias_jul_dic = calcular_dias_laborados(fecha_inicio_jul, fecha_fin_dic)
@@ -82,15 +81,19 @@ moratoria_prima = calcular_moratoria(salario_base_2024 / 30, dias_mora_prima)
 # === OUTPUT ===
 results = pd.DataFrame({
     "Concepto": [
+        "Salario base devengado",
+        "Fecha de inicio", "Fecha de terminación",
         "Días laborados 2023", "Días laborados 2024",
         "Prima Abr-Jun 2023", "Prima Jul-Dic 2023", "Prima Ene-Feb 2024",
         "Cesantías 2023 (con extras)", "Cesantías 2024",
         "Vacaciones 2023 (con extras)", "Vacaciones 2024",
         "Intereses Cesantías 2023", "Intereses Cesantías 2024",
-        "Días de mora Cesantías", "Moratoria Cesantías",
-        "Días de mora Prima", "Moratoria Prima"
+        "Días de mora Cesantías", "Valor por mora Cesantías",
+        "Días de mora Prima", "Valor por mora Prima"
     ],
     "Valor": [
+        salario_base,
+        fecha_inicio_abr, fecha_fin_feb,
         dias_2023, dias_2024,
         round(prima_abr_jun, 2), round(prima_jul_dic, 2), round(prima_ene_feb, 2),
         round(cesantias_2023, 2), round(cesantias_2024, 2),
