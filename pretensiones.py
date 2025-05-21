@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 # --- Fechas Clave del Contrato y Cálculo ---
 FECHA_INICIO_CONTRATO = datetime(2023, 4, 17)
 FECHA_FIN_CONTRATO = datetime(2024, 2, 17)
-FECHA_ACTUAL_CALCULO = datetime(2025, 5, 9) # Fecha en que se realizan estos cálculos
+FECHA_ACTUAL_CALCULO = datetime(2025, 5, 22) # Fecha en que se realizan estos cálculos
 
 # --- Salario Base de Referencia ---
 # Este es el salario base contractual. Se usa como referencia y para cálculos
@@ -184,8 +184,8 @@ for month_period, group in df_paystubs.groupby('year_month_period'):
 df_monthly_report = pd.DataFrame(monthly_summary_list)
 
 # Filtrar el reporte para el periodo de interés del contrato
-contract_start_period = FECHA_INICIO_CONTRATO.to_period('M')
-contract_end_period = FECHA_FIN_CONTRATO.to_period('M')
+contract_start_period = pd.Period(year=FECHA_INICIO_CONTRATO.year, month=FECHA_INICIO_CONTRATO.month, freq='M')
+contract_end_period = pd.Period(year=FECHA_FIN_CONTRATO.year, month=FECHA_FIN_CONTRATO.month, freq='M')
 df_monthly_report['Month_Period_Obj'] = pd.PeriodIndex(df_monthly_report['Mes'], freq='M')
 
 df_monthly_report_filtered = df_monthly_report[
